@@ -1,0 +1,119 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  overflow: hidden;
+  height: 100vh;
+}
+
+
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#omnitrix-logo {
+  width: 100px;
+  animation: spin 6s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.alien {
+  position: absolute;
+  right: 30px;
+  bottom: 50px;
+}
+
+.alien img {
+  width: 120px;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+
+.quiz-container {
+  width: 90%;
+  max-width: 600px;
+  margin: 150px auto 0;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 30px;
+  border-radius: 20px;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  text-align: center;
+}
+
+.quiz-container h1 {
+  margin-bottom: 20px;
+  color: #00ff66;
+  text-shadow: 0 0 10px #00ff66;
+}
+
+#question {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+#options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.option {
+  padding: 12px;
+  border: 2px solid #00ff66;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+  background: rgba(0, 255, 100, 0.1);
+}
+
+.option:hover {
+  background: rgba(0, 255, 100, 0.3);
+  transform: scale(1.05);
+}
+
+
+.option.correct {
+  background: #28a745;
+  color: white;
+  font-weight: bold;
+}
+
+.option.wrong {
+  background: #dc3545;
+  color: white;
+  font-weight: bold;
+}
+
+.btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border: none;
+  background: #00ff66;
+  color: black;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: #00cc55;
+  color: white;
+}
