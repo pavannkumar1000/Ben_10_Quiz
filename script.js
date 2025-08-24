@@ -6,86 +6,105 @@ let currentQuestionIndex = 0;
 let score = 0;
 let selectedQuestions = [];
 
-// Shuffle function
-function shuffleArray(array) {
-  return array.sort(() => Math.random() - 0.5);
+
+function shuffleArray(arr) {
+  return arr.slice().sort(() => Math.random() - 0.5);
 }
 
-// Start Quiz
+
 function startQuiz() {
-  selectedQuestions = shuffleArray([...questions]).slice(0, 10); // Pick 10 random
+  selectedQuestions = shuffleArray([...questions]).slice(0, 10);
   currentQuestionIndex = 0;
   score = 0;
-  nextBtn.style.display = "none";
+
+  nextBtn.textContent = "Next";
+  nextBtn.dataset.mode = "next"; 
+  nextBtn.style.display = "none"; 
+
   showQuestion();
 }
 
-// Show a question
+
 function showQuestion() {
   resetState();
 
   let currentQuestion = selectedQuestions[currentQuestionIndex];
-  questionElement.textContent = currentQuestion.question;
+  questionElement.textContent = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
 
-  // Shuffle options before showing
+  
   let shuffledOptions = shuffleArray([...currentQuestion.options]);
 
-  shuffledOptions.forEach(option => {
+  shuffledOptions.forEach(optText => {
     const btn = document.createElement("button");
-    btn.textContent = option;
-    btn.classList.add("option");
-    optionsContainer.appendChild(btn);
-
+    btn.textContent = optText;
+    btn.className = "option";
+    btn.disabled = false;
     btn.addEventListener("click", () => selectAnswer(btn, currentQuestion.answer));
+    optionsContainer.appendChild(btn);
   });
+
+ 
+  nextBtn.style.display = "none";
 }
 
-// Reset old state
+
 function resetState() {
-  nextBtn.style.display = "none";
   while (optionsContainer.firstChild) {
     optionsContainer.removeChild(optionsContainer.firstChild);
   }
+  
+  nextBtn.style.display = "none";
 }
 
-// Handle answer
-function selectAnswer(selectedBtn, correctAnswer) {
-  const options = document.querySelectorAll(".option");
 
-  options.forEach(btn => {
+function selectAnswer(selectedBtn, correctAnswer) {
+  const optionBtns = optionsContainer.querySelectorAll(".option");
+  optionBtns.forEach(btn => {
+    btn.disabled = true;
     if (btn.textContent === correctAnswer) {
       btn.classList.add("correct");
-    } else {
-      btn.classList.add("wrong");
     }
-    btn.disabled = true;
   });
 
   if (selectedBtn.textContent === correctAnswer) {
+    selectedBtn.classList.add("correct");
     score++;
+  } else {
+    selectedBtn.classList.add("wrong");
   }
 
+
+  nextBtn.dataset.mode = "next";
+  nextBtn.textContent = "Next";
   nextBtn.style.display = "inline-block";
 }
 
-// Next button click
-nextBtn.addEventListener("click", () => {
-  currentQuestionIndex++;
-  if (currentQuestionIndex < selectedQuestions.length) {
-    showQuestion();
-  } else {
-    showScore();
-  }
-});
+function handleNextButtonClick() {
+  const mode = nextBtn.dataset.mode || "next";
 
-// Show final score
+  if (mode === "next") {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < selectedQuestions.length) {
+      showQuestion();
+    } else {
+      showScore();
+    }
+  } else if (mode === "restart") {
+    startQuiz();
+  }
+}
+
+
 function showScore() {
   resetState();
-  questionElement.textContent = `🎉 You scored ${score} out of ${selectedQuestions.length}!`;
+  questionElement.textContent = `🎉 You scored ${score} / ${selectedQuestions.length}!`;
   nextBtn.textContent = "Play Again";
+  nextBtn.dataset.mode = "restart";
   nextBtn.style.display = "inline-block";
-  nextBtn.onclick = () => startQuiz();
 }
 
-// Start when page loads
+
+nextBtn.addEventListener("click", handleNextButtonClick);
+
+
 startQuiz();
